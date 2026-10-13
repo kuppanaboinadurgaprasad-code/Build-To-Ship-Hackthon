@@ -1,5 +1,14 @@
 import axios from 'axios';
 
+const rawEnvUrl = (import.meta.env.VITE_API_URL || '').trim();
+// Strip trailing slash and trailing '/api' to obtain the pure server origin
+const cleanOrigin = rawEnvUrl
+  ? rawEnvUrl.replace(/\/api\/?$/i, '').replace(/\/$/, '')
+  : '';
+
+export const BACKEND_ORIGIN = cleanOrigin || (typeof window !== 'undefined' ? window.location.origin : '');
+export const API_BASE_URL = cleanOrigin ? `${cleanOrigin}/api` : '/api';
+
 /**
  * Centralised Axios instance.
  *
@@ -8,11 +17,9 @@ import axios from 'axios';
  *   - Prod → set VITE_API_URL to your deployed backend origin
  */
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL
-    ? `${import.meta.env.VITE_API_URL}/api`
-    : '/api',
+  baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 30_000,
+  timeout: 45_000,
 });
 
 // ─── Request interceptor: attach JWT if present ───────────────────────────────

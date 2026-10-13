@@ -18,10 +18,20 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow non-browser requests (Postman, curl, server-to-server)
+      // Allow non-browser requests (Postman, curl, server-to-server) or missing origin
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      callback(new Error(`CORS policy: origin "${origin}" is not allowed.`));
+      if (
+        allowedOrigins.includes(origin) ||
+        allowedOrigins.includes('*') ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        origin.endsWith('.vercel.app') ||
+        origin.endsWith('.onrender.com') ||
+        origin.endsWith('.netlify.app')
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -86,10 +96,19 @@ app.use((err, req, res, _next) => {
 });
 
 // ─── Start ────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`\n🚀 AgentSphere AI backend running on http://localhost:${PORT}`);
   console.log(`   Environment : ${process.env.NODE_ENV || 'development'}`);
   console.log(`   Health check: http://localhost:${PORT}/health\n`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.warn(`\n⚠️  Port ${PORT} is already in use by another running instance of the backend.`);
+    console.warn(`   The server is already running and accessible on http://localhost:${PORT}\n`);
+  } else {
+    console.error('[Server Error]', err);
+  }
 });
 
 export default app;

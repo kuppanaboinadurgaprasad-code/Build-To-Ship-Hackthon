@@ -1,5 +1,20 @@
 [
   {
+    "id": "mem-1791894333119-acp4g",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791894330845-5ahe2",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T12:25:33.119Z"
+  },
+  {
     "id": "mem-1791888480143-q1bq9",
     "user_id": null,
     "key": "ev_recommendation_task_task-1791888479045-c7mss",

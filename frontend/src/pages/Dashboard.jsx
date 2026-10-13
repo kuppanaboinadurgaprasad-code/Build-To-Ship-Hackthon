@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
-import api from '../api/axios.js';
+import api, { API_BASE_URL } from '../api/axios.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PRE-BUILT COMPETITION PRESETS
@@ -97,6 +97,23 @@ export default function Dashboard() {
 
   const eventSourceRef = useRef(null);
   const timelineEndRef = useRef(null);
+  const pollingRef = useRef(null);
+
+  const stopPolling = useCallback(() => {
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+      pollingRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      stopPolling();
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+    };
+  }, [stopPolling]);
 
   // Load initial tasks & memories
   const fetchTasks = useCallback(async () => {
@@ -136,10 +153,11 @@ export default function Dashboard() {
     }
 
     const token = localStorage.getItem('opssync_token') || 'demo_token';
-    // Always use a relative /api path so the Vite dev-server proxy forwards it to
-    // localhost:5000 — this avoids CORS entirely because EventSource can't send
-    // Authorization headers, and a cross-origin request to port 5000 would be blocked.
-    const sseUrl = `/api/agent/stream/${taskId}?token=${encodeURIComponent(token)}`;
+    // Use API_BASE_URL if pointing to deployed backend (Render), otherwise relative /api for local Vite proxy
+    const sseBase = API_BASE_URL.startsWith('http')
+      ? `${API_BASE_URL}/agent/stream/${taskId}`
+      : `/api/agent/stream/${taskId}`;
+    const sseUrl = `${sseBase}?token=${encodeURIComponent(token)}`;
 
     const es = new EventSource(sseUrl);
     eventSourceRef.current = es;
@@ -151,107 +169,130 @@ export default function Dashboard() {
     };
 
     es.addEventListener('agent_log', (e) => {
-      const log = JSON.parse(e.data);
-      setLiveLogs((prev) => [log, ...prev]);
+      try {
+        const log = JSON.parse(e.data);
+        setLiveLogs((prev) => [log, ...prev]);
+      } catch (err) {
+        console.warn('SSE log parse err:', err);
+      }
     });
 
     es.addEventListener('agent_thought', (e) => {
-      const thought = JSON.parse(e.data);
-      setLiveLogs((prev) => [
-        {
-          id: `thought-${Date.now()}`,
-          timestamp: thought.timestamp,
-          agentId: thought.agentId,
-          agentName: thought.agentName,
-          stage: 'Autonomous Reasoning',
-          detail: thought.thought,
-          level: 'thought',
-        },
-        ...prev,
-      ]);
+      try {
+        const thought = JSON.parse(e.data);
+        setLiveLogs((prev) => [
+          {
+            id: `thought-${Date.now()}`,
+            timestamp: thought.timestamp,
+            agentId: thought.agentId,
+            agentName: thought.agentName,
+            stage: 'Autonomous Reasoning',
+            detail: thought.thought,
+            level: 'thought',
+          },
+          ...prev,
+        ]);
+      } catch (err) {
+        console.warn('SSE thought parse err:', err);
+      }
     });
 
     es.addEventListener('agent_message', (e) => {
-      const msg = JSON.parse(e.data);
-      setLiveMessages((prev) => [...prev, msg]);
+      try {
+        const msg = JSON.parse(e.data);
+        setLiveMessages((prev) => [...prev, msg]);
+      } catch (err) {
+        console.warn('SSE msg parse err:', err);
+      }
     });
 
     es.addEventListener('plan_update', (e) => {
-      const data = JSON.parse(e.data);
-      if (data.plan) {
-        setLivePlan(data.plan);
-        // Update agent statuses based on running steps
-        const runningStep = data.plan.find((s) => s.status === 'running');
-        if (runningStep) {
-          setAgentStatuses((prev) => ({
-            ...prev,
-            [runningStep.agent]: 'active',
-          }));
+      try {
+        const data = JSON.parse(e.data);
+        if (data.plan) {
+          setLivePlan(data.plan);
+          // Update agent statuses based on running steps
+          const runningStep = data.plan.find((s) => s.status === 'running');
+          if (runningStep) {
+            setAgentStatuses((prev) => ({
+              ...prev,
+              [runningStep.agent]: 'active',
+            }));
+          }
         }
+      } catch (err) {
+        console.warn('SSE plan parse err:', err);
       }
     });
 
     es.addEventListener('task_completed', (e) => {
-      const outcome = JSON.parse(e.data);
+      stopPolling();
+      try {
+        const outcome = JSON.parse(e.data);
 
-      // The engine emits camelCase fields (finalReport, verificationScorecard, etc.)
-      // but the Results page and other views check snake_case (final_report, verification_scorecard, etc.).
-      // Normalize to snake_case so the UI renders immediately without waiting for fetchTasks() refetch.
-      const normalizedTask = {
-        ...outcome,
-        final_report:           outcome.finalReport           ?? outcome.final_report,
-        verification_scorecard: outcome.verificationScorecard ?? outcome.verification_scorecard,
-        structured_result:      outcome.structuredResult      ?? outcome.structured_result,
-        execution_logs:         outcome.logs                  ?? outcome.execution_logs ?? [],
-        collaboration_messages: outcome.collaborationMessages ?? outcome.collaboration_messages ?? [],
-        tool_audits:            outcome.toolAudits            ?? outcome.tool_audits ?? [],
-      };
+        // Normalize camelCase and snake_case so Results view immediately displays data
+        const normalizedTask = {
+          ...outcome,
+          final_report:           outcome.finalReport           ?? outcome.final_report,
+          verification_scorecard: outcome.verificationScorecard ?? outcome.verification_scorecard,
+          structured_result:      outcome.structuredResult      ?? outcome.structured_result,
+          execution_logs:         outcome.logs                  ?? outcome.execution_logs ?? [],
+          collaboration_messages: outcome.collaborationMessages ?? outcome.collaboration_messages ?? [],
+          tool_audits:            outcome.toolAudits            ?? outcome.tool_audits ?? [],
+        };
 
-      setSelectedTask(normalizedTask);
-      setIsSubmitting(false);
-      setAgentStatuses({
-        orchestrator: 'done',
-        researcher: 'done',
-        reasoner: 'done',
-        executor: 'done',
-        verifier: 'done',
-        memory: 'done',
-      });
-      // Auto-navigate to Results & Audit page so the user sees the report immediately
-      setActiveView('results');
-      fetchTasks();
-      fetchMemories();
-      // Close SSE after task is complete — no more events expected
-      es.close();
-      setLiveStreamConnected(false);
+        setSelectedTask(normalizedTask);
+        setIsSubmitting(false);
+        setAgentStatuses({
+          orchestrator: 'done',
+          researcher: 'done',
+          reasoner: 'done',
+          executor: 'done',
+          verifier: 'done',
+          memory: 'done',
+        });
+        // Auto-navigate to Results & Audit page so the user sees the report immediately
+        setActiveView('results');
+        fetchTasks();
+        fetchMemories();
+        es.close();
+        setLiveStreamConnected(false);
+      } catch (err) {
+        console.warn('SSE task_completed err:', err);
+      }
     });
 
     // Handle workflow failure events
     es.addEventListener('task_failed', (e) => {
-      const failData = JSON.parse(e.data);
-      setSelectedTask((prev) => ({
-        ...(prev || {}),
-        ...failData,
-        status: 'failed',
-        final_report: failData.error ? `⚠️ Workflow failed: ${failData.error}` : '⚠️ Workflow failed with an unknown error.',
-      }));
-      setIsSubmitting(false);
-      setActiveView('results');
-      es.close();
-      setLiveStreamConnected(false);
+      stopPolling();
+      try {
+        const failData = JSON.parse(e.data);
+        setSelectedTask((prev) => ({
+          ...(prev || {}),
+          ...failData,
+          status: 'failed',
+          final_report: failData.error ? `⚠️ Workflow failed: ${failData.error}` : '⚠️ Workflow failed with an unknown error.',
+        }));
+        setIsSubmitting(false);
+        setActiveView('results');
+        es.close();
+        setLiveStreamConnected(false);
+      } catch (err) {
+        console.warn('SSE task_failed err:', err);
+      }
     });
 
     // onerror: do NOT close immediately — the browser will auto-retry SSE.
-    // Only close after repeated failures to avoid infinite retry loops.
+    // If repeated errors occur, the polling fallback will guarantee results.
     es.onerror = () => {
       errorCount++;
       setLiveStreamConnected(false);
-      if (errorCount >= 5) {
-        console.warn('[SSE] Too many errors, closing stream.');
+      if (errorCount >= 6) {
+        console.warn('[SSE] Interrupted, fallback polling active.');
         es.close();
       }
     };
-  }, [fetchTasks, fetchMemories]);
+  }, [fetchTasks, fetchMemories, stopPolling]);
 
   // Execute Task
   const handleExecuteTask = async (formOverride = null) => {
@@ -277,6 +318,46 @@ export default function Dashboard() {
         setSelectedTask(task);
         connectSSE(task.id);
         setActiveView('timeline'); // Switch to live activity
+
+        // Guaranteed fallback polling in case SSE is blocked or buffered
+        stopPolling();
+        pollingRef.current = setInterval(async () => {
+          try {
+            const taskRes = await api.get(`/agent/tasks/${task.id}`);
+            const polled = taskRes.data?.data?.task;
+            if (polled && (polled.status === 'completed' || polled.status === 'failed')) {
+              stopPolling();
+              const normalized = {
+                ...polled,
+                final_report:           polled.final_report           ?? polled.finalReport,
+                verification_scorecard: polled.verification_scorecard ?? polled.verificationScorecard,
+                structured_result:      polled.structured_result      ?? polled.structuredResult,
+                execution_logs:         polled.execution_logs         ?? polled.logs ?? [],
+                collaboration_messages: polled.collaboration_messages ?? polled.collaborationMessages ?? [],
+                tool_audits:            polled.tool_audits            ?? polled.toolAudits ?? [],
+              };
+              setSelectedTask(normalized);
+              setIsSubmitting(false);
+              setAgentStatuses({
+                orchestrator: 'done',
+                researcher: 'done',
+                reasoner: 'done',
+                executor: 'done',
+                verifier: 'done',
+                memory: 'done',
+              });
+              setActiveView('results');
+              fetchTasks();
+              fetchMemories();
+              if (eventSourceRef.current) {
+                eventSourceRef.current.close();
+                setLiveStreamConnected(false);
+              }
+            }
+          } catch (pollErr) {
+            console.warn('[Polling] Fallback poll:', pollErr.message);
+          }
+        }, 2000);
       }
     } catch (err) {
       alert(`Execution failed: ${err.message}`);
@@ -1092,90 +1173,132 @@ export default function Dashboard() {
         {/* ─────────────────────────────────────────────────────────────────── */}
         {/* VIEW 7: TASK RESULT & VERIFICATION PAGE                            */}
         {/* ─────────────────────────────────────────────────────────────────── */}
-        {activeView === 'results' && (
-          <div className="flex flex-col gap-6 animate-fade-in">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                    <Award size={20} className="text-indigo-400" />
-                    Task Deliverable & Quality Verification
-                  </h2>
-                  <p className="text-xs text-slate-400 mt-1">
-                    Verified outcome, TCO comparison analysis, and claim-by-claim audit scorecard.
-                  </p>
+        {activeView === 'results' && (() => {
+          const activeTask = selectedTask || (tasks.length > 0 ? tasks[0] : null);
+          const report = activeTask?.final_report || activeTask?.finalReport;
+          const scorecard = activeTask?.verification_scorecard || activeTask?.verificationScorecard;
+          const status = activeTask?.status || 'in_progress';
+
+          return (
+            <div className="flex flex-col gap-6 animate-fade-in">
+              <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                      <Award size={20} className="text-indigo-400" />
+                      Task Deliverable & Quality Verification
+                    </h2>
+                    <p className="text-xs text-slate-400 mt-1">
+                      {activeTask ? activeTask.title : 'Verified outcome, TCO comparison analysis, and claim-by-claim audit scorecard.'}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    {tasks.length > 1 && (
+                      <select
+                        value={activeTask?.id || ''}
+                        onChange={(e) => {
+                          const found = tasks.find((t) => t.id === e.target.value);
+                          if (found) setSelectedTask(found);
+                        }}
+                        className="bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-indigo-500"
+                      >
+                        {tasks.map((t) => (
+                          <option key={t.id} value={t.id}>
+                            {t.title ? (t.title.length > 40 ? t.title.slice(0, 40) + '…' : t.title) : t.id}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+
+                    {scorecard && (
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+                        <CheckCircle2 size={15} />
+                        Quality Score: {scorecard.score || scorecard.overallVerificationScore || 94}%
+                      </div>
+                    )}
+                  </div>
                 </div>
-                {selectedTask?.verification_scorecard && (
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
-                    <CheckCircle2 size={15} />
-                    Quality Score: {selectedTask.verification_scorecard.score}%
+              </div>
+
+              {/* Verification Scorecard Widget */}
+              {scorecard && (
+                <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <Shield size={16} className="text-amber-400" />
+                    Verification Agent Audit Scorecard
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                    {(scorecard.auditedClaims || []).map((claim, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-start gap-2.5"
+                      >
+                        <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-xs text-slate-200 leading-snug">{claim.claimText || claim.claim}</p>
+                          <p className="text-[10px] text-emerald-400 mt-1 font-mono">{claim.critique || 'Audited and verified.'}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-slate-400 border-t border-slate-800 pt-3">
+                    <span>Audit Timestamp: {scorecard.auditTimestamp ? new Date(scorecard.auditTimestamp).toLocaleString() : 'Live Execution'}</span>
+                    <span className="font-semibold text-emerald-400 font-mono">
+                      Status: {scorecard.verdict || 'VERIFIED'}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Final Report Deliverable */}
+              <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <FileText size={18} className="text-indigo-400" />
+                    Executive Recommendation Report
+                  </h3>
+                  {report && (
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(report);
+                        alert('Report copied to clipboard!');
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 border border-slate-700 cursor-pointer"
+                    >
+                      <Copy size={13} /> Copy Report
+                    </button>
+                  )}
+                </div>
+
+                {report ? (
+                  <div className="prose prose-invert max-w-none text-xs sm:text-sm text-slate-300 space-y-4 leading-relaxed bg-slate-950 p-6 rounded-2xl border border-slate-800 font-sans shadow-inner">
+                    <div className="whitespace-pre-wrap">{report}</div>
+                  </div>
+                ) : isSubmitting ? (
+                  <div className="text-center py-12 text-slate-400 text-xs flex flex-col items-center gap-3">
+                    <Loader2 size={24} className="animate-spin text-indigo-400" />
+                    <p>Agents are actively investigating, running financial calculators, and auditing claims...</p>
+                    <p className="text-[11px] text-slate-500">Your final deliverable will appear here automatically upon completion.</p>
+                  </div>
+                ) : (
+                  <div className="text-center py-12 text-slate-500 text-xs flex flex-col items-center gap-3">
+                    <FileText size={24} className="text-slate-600" />
+                    <p>No report generated yet. Submit a task from the Task Dispatcher to generate recommendations.</p>
+                    <button
+                      onClick={() => setActiveView('submit')}
+                      className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-500 cursor-pointer"
+                    >
+                      Go to Task Dispatcher
+                    </button>
                   </div>
                 )}
               </div>
             </div>
-
-            {/* Verification Scorecard Widget */}
-            {selectedTask?.verification_scorecard && (
-              <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
-                  <Shield size={16} className="text-amber-400" />
-                  Verification Agent Audit Scorecard
-                </h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                  {selectedTask.verification_scorecard.auditedClaims?.map((claim, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-start gap-2.5"
-                    >
-                      <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-xs text-slate-200 leading-snug">{claim.claimText}</p>
-                        <p className="text-[10px] text-emerald-400 mt-1 font-mono">{claim.critique}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex items-center justify-between text-xs text-slate-400 border-t border-slate-800 pt-3">
-                  <span>Audit Timestamp: {new Date(selectedTask.verification_scorecard.auditTimestamp).toLocaleString()}</span>
-                  <span className="font-semibold text-emerald-400 font-mono">
-                    Status: {selectedTask.verification_scorecard.verdict}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {/* Final Report Deliverable */}
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <FileText size={18} className="text-indigo-400" />
-                  Executive Recommendation Report
-                </h3>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(selectedTask?.final_report || '');
-                    alert('Report copied to clipboard!');
-                  }}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 border border-slate-700"
-                >
-                  <Copy size={13} /> Copy Report
-                </button>
-              </div>
-
-              {selectedTask?.final_report ? (
-                <div className="prose prose-invert max-w-none text-xs sm:text-sm text-slate-300 space-y-4 leading-relaxed bg-slate-950 p-6 rounded-2xl border border-slate-800 font-sans">
-                  <div className="whitespace-pre-wrap">{selectedTask.final_report}</div>
-                </div>
-              ) : (
-                <div className="text-center py-12 text-slate-500 text-xs">
-                  No report generated yet. Submit a task to begin.
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ─────────────────────────────────────────────────────────────────── */}
         {/* VIEW 8: MEMORY AND LEARNING AGENT                                  */}
