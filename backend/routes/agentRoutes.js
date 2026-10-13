@@ -20,15 +20,22 @@ const activeStreamSubscribers = new Map(); // taskId -> Set of SSE response obje
 const localTasksStore = new Map(); // taskId -> Task data
 
 // Helper to push events to all connected SSE clients
+// IMPORTANT: The SSE `data` field must be the raw payload object (not the full event wrapper),
+// because frontend listeners do: const log = JSON.parse(e.data) and expect fields like
+// log.agentId, log.stage, log.detail etc. directly.
 const broadcastEvent = (taskId, event) => {
   const clients = activeStreamSubscribers.get(taskId);
   if (clients && clients.size > 0) {
-    const sseMessage = `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`;
+    // Send payload directly as SSE data so frontend parsers receive the right shape.
+    const data = event.payload !== undefined ? event.payload : event;
+    const sseMessage = `event: ${event.type}\ndata: ${JSON.stringify(data)}\n\n`;
     clients.forEach((clientRes) => {
       try {
         clientRes.write(sseMessage);
       } catch (err) {
         console.warn(`[SSE] Write error for task ${taskId}:`, err.message);
+        // Remove dead client
+        clients.delete(clientRes);
       }
     });
   }
@@ -77,15 +84,25 @@ router.get('/agents', (req, res) => {
 router.get('/stream/:taskId', (req, res) => {
   const { taskId } = req.params;
 
-  // Set SSE Headers
+  // Determine the requesting origin for CORS — must be explicit for SSE (EventSource)
+  // because calling res.writeHead() overwrites Express CORS middleware headers.
+  const origin = req.headers.origin || '*';
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+    : ['http://localhost:3000', 'http://localhost:5173'];
+  const corsOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+
+  // Set SSE Headers (includes explicit CORS headers so EventSource cross-origin requests succeed)
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
     'X-Accel-Buffering': 'no',
+    'Access-Control-Allow-Origin': corsOrigin,
+    'Access-Control-Allow-Credentials': 'true',
   });
 
-  // Keep-alive ping
+  // Initial connected confirmation ping
   res.write(`event: connected\ndata: ${JSON.stringify({ taskId, status: 'listening' })}\n\n`);
 
   if (!activeStreamSubscribers.has(taskId)) {
@@ -93,13 +110,23 @@ router.get('/stream/:taskId', (req, res) => {
   }
   activeStreamSubscribers.get(taskId).add(res);
 
-  // If task already exists in local store, send current snapshot
+  // If task already completed and exists in local store, send current snapshot immediately
   const existingTask = localTasksStore.get(taskId);
   if (existingTask) {
     res.write(`event: task_snapshot\ndata: ${JSON.stringify(existingTask)}\n\n`);
   }
 
+  // Heartbeat every 25s to prevent proxy / load-balancer from timing out the SSE connection
+  const heartbeat = setInterval(() => {
+    try {
+      res.write(`: heartbeat\n\n`);
+    } catch {
+      clearInterval(heartbeat);
+    }
+  }, 25_000);
+
   req.on('close', () => {
+    clearInterval(heartbeat);
     const clients = activeStreamSubscribers.get(taskId);
     if (clients) {
       clients.delete(res);
@@ -398,7 +425,7 @@ router.get('/analytics', (_req, res) => {
       averageVerificationScore: 94.2,
       agentWorkload,
       activeAgents: 6,
-      modelInUse: 'gemini-3.8-flash',
+      modelInUse: 'gemini-2.0-flash',
     },
   });
 });
@@ -420,15 +447,15 @@ router.post('/test-api', async (req, res) => {
   try {
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+      model: 'gemini-2.0-flash',
       contents: 'Respond with a JSON object: {"status": "ok", "service": "AgentSphere AI"}',
       config: { responseMimeType: 'application/json' },
     });
 
     return res.status(200).json({
       success: true,
-      message: 'Gemini 3.8 Flash connection established successfully!',
-      model: 'gemini-3.8-flash',
+      message: 'Gemini 2.0 Flash connection established successfully!',
+      model: 'gemini-2.0-flash',
       reply: response.text,
     });
   } catch (err) {

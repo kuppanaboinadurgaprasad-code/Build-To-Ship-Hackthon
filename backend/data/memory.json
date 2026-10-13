@@ -1,5 +1,665 @@
 [
   {
+    "id": "mem-1791888480143-q1bq9",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791888479045-c7mss",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:48:00.144Z"
+  },
+  {
+    "id": "mem-1791888462593-b5lfv",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791888461919-vj3am",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:47:42.593Z"
+  },
+  {
+    "id": "mem-1791888459209-4ninm",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791888457652-3y7zo",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:47:39.209Z"
+  },
+  {
+    "id": "mem-1791888372186-pelu1",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791888370926-cqelf",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:46:12.186Z"
+  },
+  {
+    "id": "mem-1791888231066-ts19t",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791888228764-e7hyz",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:43:51.066Z"
+  },
+  {
+    "id": "mem-1791888102829-3rb8l",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887973777-m13ze",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:41:42.829Z"
+  },
+  {
+    "id": "mem-1791888102623-jlg2q",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887975769-sheqy",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:41:42.623Z"
+  },
+  {
+    "id": "mem-1791888102554-jjwab",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887981360-m30gr",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:41:42.554Z"
+  },
+  {
+    "id": "mem-1791888100441-eeg8w",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887970021-ezu13",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:41:40.441Z"
+  },
+  {
+    "id": "mem-1791888098022-dytat",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887967568-1jcjc",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:41:38.022Z"
+  },
+  {
+    "id": "mem-1791888097642-dvvda",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887967222-kct2i",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:41:37.642Z"
+  },
+  {
+    "id": "mem-1791888096046-kin01",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887965201-5rn4l",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:41:36.046Z"
+  },
+  {
+    "id": "mem-1791888014257-ibu9u",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887916758-inbbs",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:40:14.257Z"
+  },
+  {
+    "id": "mem-1791887997670-ctifc",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887993854-kce4t",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:57.670Z"
+  },
+  {
+    "id": "mem-1791887994672-ip88h",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887994049-aaobv",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:54.672Z"
+  },
+  {
+    "id": "mem-1791887986783-sl8kn",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887984622-w1oh6",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:46.783Z"
+  },
+  {
+    "id": "mem-1791887986657-giq8j",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887984691-uuzmq",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:46.657Z"
+  },
+  {
+    "id": "mem-1791887985018-6t7pw",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887982859-s2kn9",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:45.018Z"
+  },
+  {
+    "id": "mem-1791887984911-b6kw0",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887981049-klwcy",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:44.911Z"
+  },
+  {
+    "id": "mem-1791887983766-7xxoz",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887982508-v8ysn",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:43.766Z"
+  },
+  {
+    "id": "mem-1791887983241-wn5tb",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887982348-z5u5o",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:43.241Z"
+  },
+  {
+    "id": "mem-1791887983117-km9pl",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887980205-zyr3t",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:43.117Z"
+  },
+  {
+    "id": "mem-1791887982477-d4aoe",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887980143-px65o",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:42.477Z"
+  },
+  {
+    "id": "mem-1791887980456-rt0kw",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887978978-kavli",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:40.456Z"
+  },
+  {
+    "id": "mem-1791887980358-64jog",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887978211-5vmj9",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:40.358Z"
+  },
+  {
+    "id": "mem-1791887979530-idoii",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887977758-96rnn",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:39.530Z"
+  },
+  {
+    "id": "mem-1791887978776-f3aze",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887976457-20wky",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:38.776Z"
+  },
+  {
+    "id": "mem-1791887978747-3w8v3",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887974313-2qgvl",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:38.747Z"
+  },
+  {
+    "id": "mem-1791887976774-8moxd",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887976268-sf2rh",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:36.774Z"
+  },
+  {
+    "id": "mem-1791887976706-ybym5",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887974533-6ol8l",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:36.706Z"
+  },
+  {
+    "id": "mem-1791887976322-654py",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887975544-rjj2l",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:36.322Z"
+  },
+  {
+    "id": "mem-1791887974971-y6gmp",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887971872-hiuwn",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:34.971Z"
+  },
+  {
+    "id": "mem-1791887971945-qfl2g",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887965916-f6z33",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:31.945Z"
+  },
+  {
+    "id": "mem-1791887971703-9gu1h",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887967751-d0qb2",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:31.703Z"
+  },
+  {
+    "id": "mem-1791887969260-5cxj8",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887968572-iwexq",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:39:29.260Z"
+  },
+  {
+    "id": "mem-1791887931777-d10qy",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887813275-34nin",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:38:51.777Z"
+  },
+  {
+    "id": "mem-1791887183853-tun2d",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887176569-n081d",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:26:23.853Z"
+  },
+  {
+    "id": "mem-1791887018390-1wkh4",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791887009757-bcrd0",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T10:23:38.390Z"
+  },
+  {
+    "id": "mem-1791876788196-4l343",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791876770637-mx8vw",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T07:33:08.196Z"
+  },
+  {
+    "id": "mem-1791876755685-1f85b",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791876737911-1v2hy",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T07:32:35.685Z"
+  },
+  {
+    "id": "mem-1791876746533-ftso9",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791876734732-1e9o0",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T07:32:26.533Z"
+  },
+  {
+    "id": "mem-1791876743354-91rph",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791876739167-0hwus",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T07:32:23.354Z"
+  },
+  {
+    "id": "mem-1791876681867-j9re9",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791876660608-fq8p9",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T07:31:21.867Z"
+  },
+  {
+    "id": "mem-1791876649220-3peze",
+    "user_id": null,
+    "key": "ev_recommendation_task_task-1791876624739-wg62m",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T07:30:49.220Z"
+  },
+  {
     "id": "mem-1791875600293-s7pp1",
     "user_id": null,
     "key": "ev_recommendation_task_task-1791875405637-6bgk9",

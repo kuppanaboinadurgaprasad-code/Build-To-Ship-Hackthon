@@ -17,7 +17,7 @@ const getClient = (() => {
   };
 })();
 
-const MODEL = 'gemini-3.8-flash';
+const MODEL = 'gemini-2.0-flash';
 
 // ─── System Instruction ───────────────────────────────────────────────────────
 

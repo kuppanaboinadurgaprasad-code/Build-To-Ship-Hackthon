@@ -136,13 +136,17 @@ export default function Dashboard() {
     }
 
     const token = localStorage.getItem('opssync_token') || 'demo_token';
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-    const sseUrl = `${baseUrl}/api/agent/stream/${taskId}?token=${encodeURIComponent(token)}`;
+    // Always use a relative /api path so the Vite dev-server proxy forwards it to
+    // localhost:5000 — this avoids CORS entirely because EventSource can't send
+    // Authorization headers, and a cross-origin request to port 5000 would be blocked.
+    const sseUrl = `/api/agent/stream/${taskId}?token=${encodeURIComponent(token)}`;
 
     const es = new EventSource(sseUrl);
     eventSourceRef.current = es;
+    let errorCount = 0;
 
     es.onopen = () => {
+      errorCount = 0;
       setLiveStreamConnected(true);
     };
 
@@ -189,7 +193,21 @@ export default function Dashboard() {
 
     es.addEventListener('task_completed', (e) => {
       const outcome = JSON.parse(e.data);
-      setSelectedTask(outcome);
+
+      // The engine emits camelCase fields (finalReport, verificationScorecard, etc.)
+      // but the Results page and other views check snake_case (final_report, verification_scorecard, etc.).
+      // Normalize to snake_case so the UI renders immediately without waiting for fetchTasks() refetch.
+      const normalizedTask = {
+        ...outcome,
+        final_report:           outcome.finalReport           ?? outcome.final_report,
+        verification_scorecard: outcome.verificationScorecard ?? outcome.verification_scorecard,
+        structured_result:      outcome.structuredResult      ?? outcome.structured_result,
+        execution_logs:         outcome.logs                  ?? outcome.execution_logs ?? [],
+        collaboration_messages: outcome.collaborationMessages ?? outcome.collaboration_messages ?? [],
+        tool_audits:            outcome.toolAudits            ?? outcome.tool_audits ?? [],
+      };
+
+      setSelectedTask(normalizedTask);
       setIsSubmitting(false);
       setAgentStatuses({
         orchestrator: 'done',
@@ -199,13 +217,39 @@ export default function Dashboard() {
         verifier: 'done',
         memory: 'done',
       });
+      // Auto-navigate to Results & Audit page so the user sees the report immediately
+      setActiveView('results');
       fetchTasks();
       fetchMemories();
+      // Close SSE after task is complete — no more events expected
+      es.close();
+      setLiveStreamConnected(false);
     });
 
-    es.onerror = () => {
-      setLiveStreamConnected(false);
+    // Handle workflow failure events
+    es.addEventListener('task_failed', (e) => {
+      const failData = JSON.parse(e.data);
+      setSelectedTask((prev) => ({
+        ...(prev || {}),
+        ...failData,
+        status: 'failed',
+        final_report: failData.error ? `⚠️ Workflow failed: ${failData.error}` : '⚠️ Workflow failed with an unknown error.',
+      }));
+      setIsSubmitting(false);
+      setActiveView('results');
       es.close();
+      setLiveStreamConnected(false);
+    });
+
+    // onerror: do NOT close immediately — the browser will auto-retry SSE.
+    // Only close after repeated failures to avoid infinite retry loops.
+    es.onerror = () => {
+      errorCount++;
+      setLiveStreamConnected(false);
+      if (errorCount >= 5) {
+        console.warn('[SSE] Too many errors, closing stream.');
+        es.close();
+      }
     };
   }, [fetchTasks, fetchMemories]);
 
@@ -292,10 +336,12 @@ export default function Dashboard() {
     }
   };
 
-  // Current display plan and logs (use live stream if active, else selected task)
+  // Current display plan and logs (use live stream if active, else selected task snapshot)
+  // Note: SSE task_completed payload uses camelCase (logs, collaborationMessages) while
+  // Supabase-stored tasks use snake_case (execution_logs, collaboration_messages). Handle both.
   const displayPlan = livePlan.length > 0 ? livePlan : selectedTask?.plan || [];
-  const displayLogs = liveLogs.length > 0 ? liveLogs : selectedTask?.execution_logs || [];
-  const displayMessages = liveMessages.length > 0 ? liveMessages : selectedTask?.collaboration_messages || [];
+  const displayLogs = liveLogs.length > 0 ? liveLogs : (selectedTask?.execution_logs || selectedTask?.logs || []);
+  const displayMessages = liveMessages.length > 0 ? liveMessages : (selectedTask?.collaboration_messages || selectedTask?.collaborationMessages || []);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
