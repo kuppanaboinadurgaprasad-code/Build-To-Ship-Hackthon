@@ -1,0 +1,73 @@
+[
+  {
+    "id": "mem-1791874466314-x50so",
+    "user_id": null,
+    "key": "ev_recommendation_task_test-1",
+    "value": "Recommended Chevrolet Bolt EV ($9,500 net, $331/mo) for student with budget constraint. Fallback was Prius Hybrid. Section 25E applied. Verification score: 100%.",
+    "memory_type": "learning",
+    "confidence": 0.98,
+    "tags": [
+      "ev_recommendation",
+      "student_budget",
+      "bolt_ev",
+      "tco_modeling"
+    ],
+    "created_at": "2026-10-13T06:54:26.314Z"
+  },
+  {
+    "id": "mem-seed-1",
+    "key": "student_budget_constraint",
+    "memory_type": "preference",
+    "value": "Students typically have strict capital limits ($8,000–$16,000 upfront), prioritize insurance costs, and require low routine maintenance.",
+    "confidence": 0.95,
+    "tags": [
+      "student",
+      "budget",
+      "demographic",
+      "transportation"
+    ],
+    "created_at": "2026-10-06T06:53:21.314Z"
+  },
+  {
+    "id": "mem-seed-2",
+    "key": "ev_charging_infrastructure_rule",
+    "memory_type": "fact",
+    "value": "Level 1 charging (120V) provides 3–5 miles of range per hour. Level 2 (240V) provides 25–35 miles/hr. Apartment-dwelling students without dedicated parking rely heavily on campus or municipal public chargers.",
+    "confidence": 0.98,
+    "tags": [
+      "ev",
+      "charging",
+      "infrastructure",
+      "apartment"
+    ],
+    "created_at": "2026-10-08T06:53:21.316Z"
+  },
+  {
+    "id": "mem-seed-3",
+    "key": "battery_degradation_benchmark",
+    "memory_type": "fact",
+    "value": "Modern liquid-cooled lithium-ion batteries degrade at approximately 1.5%–2.3% capacity per year. Used EVs should have battery state-of-health (SoH) diagnostics verified prior to purchase.",
+    "confidence": 0.96,
+    "tags": [
+      "ev",
+      "battery",
+      "longevity",
+      "degradation"
+    ],
+    "created_at": "2026-10-10T06:53:21.316Z"
+  },
+  {
+    "id": "mem-seed-4",
+    "key": "used_clean_vehicle_tax_credit",
+    "memory_type": "learning",
+    "value": "US Section 25E provides up to 30% or $4,000 federal tax credit for eligible used clean vehicles purchased from licensed dealers under $25,000, subject to income thresholds.",
+    "confidence": 0.99,
+    "tags": [
+      "ev",
+      "tax_credit",
+      "incentive",
+      "finance"
+    ],
+    "created_at": "2026-10-11T06:53:21.317Z"
+  }
+]
